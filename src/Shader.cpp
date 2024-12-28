@@ -100,6 +100,11 @@ void Shader::SetUniformInt(std::string& name, unsigned int value) {
 	glUniform1ui(uniformLocation, value);
 }
 
+void Shader::SetUniformMat4(std::string& name, float* value) {
+	unsigned int uniformLocation = GetUniformLocation(name);
+	glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, value);
+}
+
 void Shader::Use() {
 	glUseProgram(m_programId);
 }

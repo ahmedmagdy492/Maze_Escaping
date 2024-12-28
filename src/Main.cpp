@@ -6,11 +6,12 @@
 #include <iostream>
 
 #include "../include/Settings.h"
-#include "../include/Shader.h"
-#include "../include/VertexBuffer.h"
-#include "../include/ElementBuffer.h"
-#include "../include/VertexArray.h"
-#include "../include/Texture.h"
+#include "../include/MazeRenderer.h"
+
+bool keys[1024];
+glm::vec3 cameraFront;
+float lastX = 400.0f, lastY = 300.0f;
+float pitch = 0.0f, yaw = 0.0f;
 
 void error_callback(int error, const char* description)
 {
@@ -23,7 +24,48 @@ void framebuffer_resize_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, MazeEscaping::screen_width, MazeEscaping::screen_height);
 }
 
+void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+	if (action == GLFW_PRESS) {
+		keys[key] = true;
+	}
+	else if (action == GLFW_RELEASE) {
+		keys[key] = false;
+	}
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+	float xOffset = xpos - lastX;
+	float yOffset = lastY - ypos;
+
+	float sensitivity = 0.2f;
+
+	xOffset *= sensitivity;
+	yOffset *= sensitivity;
+
+	yaw += xOffset;
+	pitch += yOffset;
+
+	if (pitch > 89.0f) {
+		pitch = 89.0f;
+	}
+	if (pitch < -89.0f) {
+		pitch = -89.0f;
+	}
+
+	cameraFront.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+	cameraFront.y = sin(glm::radians(pitch));
+	cameraFront.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+	cameraFront = glm::normalize(cameraFront);
+
+	lastX = xpos;
+	lastY = ypos;
+}
+
 int main() {
+	float deltaTime = 0.0f;
+	float lastFrameTime = 0.0f;
+	GLFWwindow* window = nullptr;
+
 	if (!glfwInit()) {
 		std::cerr << "Failed to init glfw" << std::endl;
 		return 1;
@@ -35,7 +77,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(MazeEscaping::screen_width, MazeEscaping::screen_height, MazeEscaping::window_title, nullptr, nullptr);
+	window = glfwCreateWindow(MazeEscaping::screen_width, MazeEscaping::screen_height, MazeEscaping::window_title, nullptr, nullptr);
 
 	if (!window) {
 		std::cerr << "Failed to create a glfw window" << std::endl;
@@ -50,41 +92,27 @@ int main() {
 	}
 
 	glViewport(0, 0, MazeEscaping::screen_width, MazeEscaping::screen_height);
+	glEnable(GL_DEPTH_TEST);
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_resize_callback);
 
+	glfwSetKeyCallback(window, (GLFWkeyfun)keyboard_callback);
+	glfwSetCursorPosCallback(window, (GLFWcursorposfun)mouse_callback);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	// part to move from here
-	VertexArray va;
-	va.Bind();
-	float vertexTempData[] = {
-		 0.0f,  0.5f, 0.0f,  0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f,
-		 0.5f, -0.5f, 0.0f,  1.0f, 1.0f
-	};
-	unsigned int elementBufferData[] = {
-		0, 1, 2
-	};
-	VertexBuffer vb(vertexTempData, sizeof(vertexTempData));
-	ElementBuffer eb(elementBufferData, sizeof(elementBufferData));
-	// end of part to move
-
-	Shader mainShader("resources/shaders/vertex.shader", "resources/shaders/fragment.shader");
-	mainShader.Use();
-
-	Texture texture("resources/assets/bg.png", GL_TEXTURE0, GL_RGBA);
-	texture.Bind();
-	std::string texturUniformName = "un_texture";
-	mainShader.SetUniformInt(texturUniformName, 0);
+	MazeRenderer mazeRenderer(MazeEscaping::screen_width, MazeEscaping::screen_height);
 
 	while (!glfwWindowShouldClose(window)) {
-
-		glClearColor(MazeEscaping::background_color.red, MazeEscaping::background_color.green, MazeEscaping::background_color.blue, MazeEscaping::background_color.alpha);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
-
 		glfwPollEvents();
+
+		float currentTime = glfwGetTime();
+		deltaTime = currentTime - lastFrameTime;
+		lastFrameTime = currentTime;
+
+		mazeRenderer.Update(cameraFront, keys, deltaTime);
+
+		mazeRenderer.RenderMaze();
+		
 		glfwSwapBuffers(window);
 	}
 

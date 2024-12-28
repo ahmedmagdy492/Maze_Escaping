@@ -14,6 +14,7 @@ public:
 	Shader(const std::string& vertexShaderFilePath, const std::string& fragShaderFilePath);
 
 	void SetUniformInt(std::string& name, unsigned int value);
+	void SetUniformMat4(std::string& name, float* value);
 
 	void Use();
 };
