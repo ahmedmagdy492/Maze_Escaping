@@ -18,8 +18,6 @@ glm::mat4 Player::Move(bool keys[], float deltaTime, glm::vec3 velocity) {
 
 	if (keys[KEY_W])
 		position += speed * velocity;
-	if (keys[KEY_S])
-		position -= speed * velocity;
 	if (keys[KEY_D])
 		position += glm::normalize(glm::cross(velocity, cameraUp)) * speed;
 	if (keys[KEY_A])

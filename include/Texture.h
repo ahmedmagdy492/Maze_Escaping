@@ -5,12 +5,11 @@
 class Texture {
 private:
 	unsigned int m_id;
-	unsigned int m_textureUnit;
 
 public:
-	Texture(const std::string& imagePath, unsigned int textureUnit, unsigned int imgPixelFormat);
+	Texture(const std::string& imagePath, int textureUnit, unsigned int imgPixelFormat);
 
-	void Bind();
+	void Bind(int textureUnit);
 	void Unbind();
 
 	~Texture();

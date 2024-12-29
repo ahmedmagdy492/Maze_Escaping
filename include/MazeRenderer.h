@@ -16,7 +16,7 @@ private:
 	const unsigned char cellSize = 5; // in pixels
 	unsigned short colsCount;
 	unsigned short rowsCount;
-	Texture* wallTexture;
+	Texture* wallTexture, *wall2Texture, *landTexture;
 	VertexArray* va;
 	VertexBuffer* vb;
 	ElementBuffer* eb;
@@ -31,6 +31,7 @@ public:
 	void RenderMaze();
 
 	void Draw3dLine(float x, float y, int w, int h, float angle);
+	void DrawPlane(float x, float y, int w, int h);
 
 	~MazeRenderer();
 };
