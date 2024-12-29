@@ -142,6 +142,7 @@
     <ClCompile Include="deps\GLAD\glad.c" />
     <ClCompile Include="src\ElementBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\MazeCell.cpp" />
     <ClCompile Include="src\MazeRenderer.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Shader.cpp" />

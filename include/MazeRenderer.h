@@ -13,7 +13,7 @@
 class MazeRenderer {
 private:
 	std::vector<MazeCell> cells;
-	const unsigned char cellSize = 5; // in pixels
+	const unsigned char cellSize = 10; // in pixels
 	unsigned short colsCount;
 	unsigned short rowsCount;
 	Texture* wallTexture, *wall2Texture, *landTexture;
