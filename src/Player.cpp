@@ -12,14 +12,14 @@
 Player::Player(glm::vec3 initPos) : position(initPos) {
 }
 
-glm::mat4 Player::Move(bool keys[], float deltaTime, glm::vec3 velocity) {
+glm::mat4 Player::Move(bool keys[], float deltaTime, glm::vec3 direction) {
 	float speed = 10.0f * deltaTime;
 	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	if (keys[KEY_W])
-		position += speed * velocity;
+		position += speed * direction;
 
-	return glm::lookAt(position, position + velocity, cameraUp);
+	return glm::lookAt(position, position + direction, cameraUp);
 }
 
 Player::~Player() {

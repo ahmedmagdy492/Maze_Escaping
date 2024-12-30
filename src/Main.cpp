@@ -53,7 +53,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	}
 
 	cameraFront.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-	cameraFront.y = sin(glm::radians(pitch));
+	//cameraFront.y = sin(glm::radians(pitch));
 	cameraFront.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
 	cameraFront = glm::normalize(cameraFront);
 
