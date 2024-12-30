@@ -17,13 +17,6 @@
 #include <stack>
 
 // data section
-//static float wallVertexData[] = {
-//	-0.5f, 0.5f, 0.0f,   0.0f, 0.0f,
-//	 0.5f, 0.5f, 0.0f,   1.0f, 0.0f,
-//	-0.5f, -0.5f, 0.0f,  0.0f, 1.0f,
-//	 0.5f, -0.5f, 0.0f,  1.0f, 1.0f
-//};
-
 static float wallVertexData[] = {
 	// Front face
    -0.5f,  0.5f,  0.5f,   0.0f, 0.0f,  // Top-left
@@ -55,11 +48,11 @@ static float wallVertexData[] = {
 	  -0.5f,  0.5f,  0.5f,   0.0f, 1.0f,  // Bottom-left
 	   0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  // Bottom-right
 
-	   // Bottom face
-	   -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // Top-left
-		0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Top-right
-	   -0.5f, -0.5f,  0.5f,   0.0f, 1.0f,  // Bottom-left
-		0.5f, -0.5f,  0.5f,   1.0f, 1.0f   // Bottom-right
+	  // Bottom face
+	  -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // Top-left
+	  0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Top-right
+	  -0.5f, -0.5f,  0.5f,   0.0f, 1.0f,  // Bottom-left
+	  0.5f, -0.5f,  0.5f,   1.0f, 1.0f   // Bottom-right
 };
 
 static unsigned int elementBufferData[] = {
@@ -72,29 +65,23 @@ static unsigned int elementBufferData[] = {
 };
 
 static void RemoveWalls(MazeCell* current, MazeCell* next) {
-	static int count = 0;
 
 	if ((current->i - next->i) == -1) {
 		current->walls.willDrawRight = false;
 		next->walls.willDrawLeft = false;
-		count++;
 	}
 	else if ((current->i - next->i) == 1) {
 		current->walls.willDrawLeft = false;
 		next->walls.willDrawRight = false;
-		count++;
 	}
 	else if ((current->j - next->j) == -1) {
 		current->walls.willDrawBottom = false;
 		next->walls.willDrawTop = false;
-		count++;
 	}
 	else if ((current->j - next->j) == 1) {
 		current->walls.willDrawTop = false;
 		next->walls.willDrawBottom = false;
-		count++;
 	}
-	std::cout << "Count of walls removed: " << count / 2 << std::endl;
 }
 
 static bool AreThereAnyLeftUnVisitedCell(std::vector<MazeCell>& cells) {
@@ -117,7 +104,7 @@ MazeRenderer::MazeRenderer(int width, int height) : width(width), height(height)
 	vb = new VertexBuffer(wallVertexData, sizeof(wallVertexData));
 	eb = new ElementBuffer(elementBufferData, sizeof(elementBufferData));
 
-	player = new Player(glm::vec3(0.0f, 0.0f, -0.3f));
+	player = new Player(glm::vec3(0.0f, 0.0f, 1.0f));
 
 	// generating the maze
 	colsCount = 10;

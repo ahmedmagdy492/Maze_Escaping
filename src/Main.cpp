@@ -3,8 +3,13 @@
 #include <glad/glad.h>
 #include <iostream>
 
+#define MINIAUDIO_IMPLEMENTATION
+
 #include "../include/Settings.h"
 #include "../include/MazeRenderer.h"
+
+#include "../include/AudioPlayer.h"
+
 
 bool keys[1024];
 glm::vec3 cameraFront;
@@ -51,7 +56,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	}
 
 	cameraFront.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-	//cameraFront.y = sin(glm::radians(pitch));
 	cameraFront.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
 	cameraFront = glm::normalize(cameraFront);
 
@@ -63,6 +67,10 @@ int main() {
 	float deltaTime = 0.0f;
 	float lastFrameTime = 0.0f;
 	GLFWwindow* window = nullptr;
+	AudioLib::AudioPlayer audioPlayer;
+	
+	std::string bgAudioFilePath = "resources/assets/bg.mp3";
+	audioPlayer.LoadAudio(bgAudioFilePath);
 
 	if (!glfwInit()) {
 		std::cerr << "Failed to init glfw" << std::endl;
@@ -103,6 +111,10 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 
+		if (!audioPlayer.IsPlaying() || audioPlayer.HasPlaybackEnded()) {
+			audioPlayer.PlayAudio();
+		}
+
 		float currentTime = glfwGetTime();
 		deltaTime = currentTime - lastFrameTime;
 		lastFrameTime = currentTime;
@@ -116,5 +128,6 @@ int main() {
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
+	audioPlayer.UnloadAudio();
 	return 0;
 }

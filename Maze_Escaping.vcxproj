@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="deps\GLAD\glad.c" />
+    <ClCompile Include="src\AudioPlayer.cpp" />
     <ClCompile Include="src\ElementBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MazeCell.cpp" />
@@ -152,9 +153,11 @@
     <ClCompile Include="src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\AudioPlayer.h" />
     <ClInclude Include="include\ElementBuffer.h" />
     <ClInclude Include="include\MazeCell.h" />
     <ClInclude Include="include\MazeRenderer.h" />
+    <ClInclude Include="include\miniaudio.h" />
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\Settings.h" />
     <ClInclude Include="include\Shader.h" />
