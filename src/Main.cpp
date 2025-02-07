@@ -3,6 +3,9 @@
 #include <glad/glad.h>
 #include <iostream>
 
+#include <Windows.h>
+#include <consoleapi.h>
+
 #define MINIAUDIO_IMPLEMENTATION
 
 #include "../include/Settings.h"
@@ -68,6 +71,8 @@ int main() {
 	float lastFrameTime = 0.0f;
 	GLFWwindow* window = nullptr;
 	AudioLib::AudioPlayer audioPlayer;
+
+	FreeConsole();
 	
 	std::string bgAudioFilePath = "resources/assets/bg.mp3";
 	audioPlayer.LoadAudio(bgAudioFilePath);
